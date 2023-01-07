@@ -23,7 +23,7 @@ fn main() {
     let text: Vec<String> = matches
         .get_many("text")
         .expect("text is required")
-        .map(|s: &String| s.clone())
+        .cloned()
         .collect();
 
     let ending = if matches.get_flag("omit_newline") {
