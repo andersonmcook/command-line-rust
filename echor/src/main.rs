@@ -3,8 +3,6 @@ use clap::{Arg, ArgAction, Command};
 fn main() {
     let matches = Command::new("echor")
         .about("Rust echo")
-        .version("0.1.0")
-        .author("Anderson Cook <andersonmcook@gmail.com>")
         .arg(
             Arg::new("text")
                 .value_name("TEXT")
@@ -18,6 +16,8 @@ fn main() {
                 .help("Do not print newline")
                 .action(ArgAction::SetTrue),
         )
+        .author("Anderson Cook <andersonmcook@gmail.com>")
+        .version("0.1.0")
         .get_matches();
 
     let text: Vec<String> = matches
