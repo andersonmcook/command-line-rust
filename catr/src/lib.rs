@@ -24,8 +24,20 @@ pub struct Args {
 }
 
 pub fn run(args: Args) {
+    let mut line_number = 0;
+
     args.files.iter().for_each(|file| match open(&file) {
-        Ok(_) => println!("Opened {}", file),
+        Ok(buf) => buf.lines().for_each(|line| {
+            let line = line.unwrap();
+
+            // TODO: can decide this flow once before iterating
+            if args.number || (args.number_nonblank && !line.is_empty()) {
+                line_number += 1;
+                println!("{:>6}\t{}", line_number, line)
+            } else {
+                println!("{}", line)
+            }
+        }),
         Err(err) => eprintln!("Failed to open {}: {}", file, err),
     });
 }
