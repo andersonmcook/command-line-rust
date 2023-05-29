@@ -23,14 +23,15 @@ pub struct Args {
     number_nonblank: bool,
 }
 
-pub fn run(args: Args) {
+pub fn run() {
+    let args = Args::parse();
     let mut line_number = 0;
 
     args.files.iter().for_each(|file| match open(&file) {
         Ok(buf) => buf.lines().for_each(|line| {
-            let line = line.unwrap();
+            let line = line.expect("failed to read line");
 
-            // TODO: can decide this flow once before iterating
+            // NOTE: can decide this flow once before iterating but requires a Box
             if args.number || (args.number_nonblank && !line.is_empty()) {
                 line_number += 1;
                 println!("{:>6}\t{}", line_number, line)
@@ -40,10 +41,6 @@ pub fn run(args: Args) {
         }),
         Err(err) => eprintln!("Failed to open {}: {}", file, err),
     });
-}
-
-pub fn get_args() -> Args {
-    Args::parse()
 }
 
 fn open(filename: &str) -> Result<Box<dyn BufRead>, Box<dyn Error>> {
